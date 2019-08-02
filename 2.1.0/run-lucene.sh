@@ -11,8 +11,15 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-if [ "$COUCHDB_USER" ] && [ "$COUCHDB_PASSWORD" ]; then
-  sed -e "s/couchdb:5984/$COUCHDB_USER:$COUCHDB_PASSWORD@couchdb:5984/" -i /opt/couchdb-lucene/conf/couchdb-lucene.ini
+if [ "$COUCHDB_USER" ] && [ "$COUCHDB_PASSWORD" ] && [ "$COUCHDB_URL" ]; then
+  sed -e "s/http:\/\/couchdb:5984/$COUCHDB_USER:$COUCHDB_PASSWORD@$COUCHDB_URL:5984/" -i /opt/couchdb-lucene/conf/couchdb-lucene.ini
+  sed -e "s/https:\/\/couchdb:5984/$COUCHDB_USER:$COUCHDB_PASSWORD@$COUCHDB_URL:5984/" -i /opt/couchdb-lucene/conf/couchdb-lucene.ini
+elif [ "$COUCHDB_USER" ] && [ "$COUCHDB_PASSWORD" ]; then
+  sed -e "s/http:\/\/couchdb:5984/$COUCHDB_USER:$COUCHDB_PASSWORD@couchdb:5984/" -i /opt/couchdb-lucene/conf/couchdb-lucene.ini
+  sed -e "s/https:\/\/couchdb:5984/$COUCHDB_USER:$COUCHDB_PASSWORD@couchdb:5984/" -i /opt/couchdb-lucene/conf/couchdb-lucene.ini
+elif [ "$COUCHDB_URL" ]; then
+  sed -e "s/http:\/\/couchdb:5984/$COUCHDB_URL:5984/" -i /opt/couchdb-lucene/conf/couchdb-lucene.ini
+  sed -e "s/https:\/\/couchdb:5984/$COUCHDB_URL:5984/" -i /opt/couchdb-lucene/conf/couchdb-lucene.ini
 fi
 
 chown -R couchdb:couchdb /opt/couchdb-lucene
